@@ -1,7 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
-
+const db = '';
 const app = express();
 const port = 3000;
 
@@ -21,51 +21,23 @@ const Post = mongoose.model('Post', {
 });
 
 app.post('/post', (req,res)=>{
-    const post = new Post(req.body);
-    post.save()
-    .then((newPost)=>{
-        res.status(201).send(newPost);
-    })
-    .catch((err)=>{
-        console.log(err);
-        res.status(400).send(err);
-    });
+
 });
 
 app.get('/post', (req,res)=>{
-    Post.find()
-    .then((posts)=> res.status(200).send(posts))
-    .catch(()=> res.sendStatus(500));
+
 });
 
 app.get('/post/:id',(req,res)=>{
-    Post.findById(req.params.id)
-    .then(post => res.status(200).send(post))
-    .catch(() => res.sendStatus(500));
+
 });
 
 app.put('/post/:id',(req,res)=>{
-    Post.findByIdAndUpdate(req.params.id, req.body)
-    .then((updatedPost) => {
-        if (!updatedPost) {
-            res.sendStatus(404);
-            return;
-        }
-        res.status(200).send(updatedPost);
-    })
-    .catch((err) => res.status(400).send(err));
+
 });
 
 app.delete('/post/:id',(req,res)=>{
-    Post.findByIdAndDelete(req.params.id)
-    .then((deletedPost) => {
-        if (!deletedPost) {
-            res.sendStatus(404);
-            return;
-        }
-        res.sendStatus(204);
-    })
-    .catch(() => res.sendStatus(500));
+
 });
 
 function listen() {
@@ -74,8 +46,8 @@ function listen() {
     });
 }
 
-function connect() {
-    mongoose.connect('mongodb://localhost:27017/pinterest');
+function connect(url) {
+    mongoose.connect(`mongodb://localhost:27017/${url}`);
     const db = mongoose.connection;
     db.on('error', console.error.bind(console, 'connection error:'));
     db.once('open', () => {
@@ -84,4 +56,4 @@ function connect() {
     });
 }
 
-connect();
+connect(db);
